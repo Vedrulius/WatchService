@@ -1,13 +1,28 @@
 package com.mihey.personwatcher.service.impl
 
+import com.google.gson.Gson
 import com.mihey.personwatcher.model.Person
 import com.mihey.personwatcher.repository.PersonRepository
 import com.mihey.personwatcher.service.PersonService
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import java.io.File
 
 @Service
 class PersonServiceImpl(private val personRepository: PersonRepository) : PersonService {
+
+    fun getPersonsFromFile(file: File) {
+        val personsString: String = file.readLines().joinToString(separator = "")
+        val gson = Gson()
+        try {
+            val persons: List<Person> = gson.fromJson(personsString, Array<Person>::class.java).toList()
+            for (person in persons) {
+                savePerson(person)
+            }
+        } catch (e: Exception) {
+            print(e.message)
+        }
+    }
 
     override fun getPersons(): List<Person> {
         return personRepository.findAll()
@@ -17,12 +32,12 @@ class PersonServiceImpl(private val personRepository: PersonRepository) : Person
         return personRepository.findByIdOrNull(id)
     }
 
-    override fun savePerson(person: Person) {
-        personRepository.save(person)
+    override fun savePerson(person: Person): Person {
+        return personRepository.save(person)
     }
 
-    override fun updatePerson(person: Person) {
-        personRepository.save(person)
+    override fun updatePerson(person: Person): Person {
+        return personRepository.save(person)
     }
 
     override fun deleteById(id: Int) {

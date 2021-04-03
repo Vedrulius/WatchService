@@ -6,7 +6,7 @@ interface PersonService {
 
     fun getPersons(): List<Person>
     fun findById(id: Int): Person?
-    fun savePerson(person: Person)
-    fun updatePerson(person: Person)
+    fun savePerson(person: Person): Person
+    fun updatePerson(person: Person): Person
     fun deleteById(id: Int)
 }

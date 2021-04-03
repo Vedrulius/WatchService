@@ -1,13 +1,14 @@
 package com.mihey.personwatcher.model
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity
+@Table(name = "persons")
 data class Person(
+
     @Id
-    val id: Int,
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Int?,
     @Column(name = "name")
     val name: String,
     @Column(name = "last_name")
