@@ -1,5 +1,6 @@
 package com.mihey.personwatcher.service.impl
 
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.nio.file.*
@@ -8,7 +9,8 @@ import java.nio.file.*
 class WatchServiceImpl(private val personService: PersonServiceImpl) {
 
     @Value("\${watchservice.path}")
-    lateinit var  filePath: String
+    lateinit var filePath: String
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     fun watching() {
         try {
@@ -21,7 +23,7 @@ class WatchServiceImpl(private val personService: PersonServiceImpl) {
                 }
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            logger.error(e.message)
         }
     }
 }

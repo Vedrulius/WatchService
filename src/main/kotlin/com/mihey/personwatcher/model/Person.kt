@@ -8,6 +8,7 @@ data class Person(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     val id: Int?,
     @Column(name = "name")
     val name: String,
