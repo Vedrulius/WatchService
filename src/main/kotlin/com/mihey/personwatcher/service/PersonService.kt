@@ -4,10 +4,6 @@ import com.mihey.personwatcher.model.Person
 
 interface PersonService {
 
-    fun getPersons(): List<Person>
-    fun findById(id: Int): Person?
     fun savePerson(person: Person): Person
-    fun updatePerson(person: Person): Person
-    fun deleteById(id: Int)
     fun isPersonPresent(name: String, lastName: String): Boolean
 }
