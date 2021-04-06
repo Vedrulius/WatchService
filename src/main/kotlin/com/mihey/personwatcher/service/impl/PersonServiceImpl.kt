@@ -14,13 +14,14 @@ import java.nio.file.*
 class PersonServiceImpl(private val personRepository: PersonRepository) : PersonService {
 
     private val logger = LoggerFactory.getLogger(javaClass)
+    private val gson = Gson()
+    private val watchService: WatchService = FileSystems.getDefault().newWatchService()
 
     @Value("\${watchservice.path}")
     lateinit var filePath: String
 
     fun watchingForPersons() {
         try {
-            val watchService: WatchService = FileSystems.getDefault().newWatchService()
             val path: Path = Paths.get(filePath)
             val key: WatchKey = path.register(watchService, StandardWatchEventKinds.ENTRY_CREATE)
             while (true) {
@@ -34,10 +35,9 @@ class PersonServiceImpl(private val personRepository: PersonRepository) : Person
     }
 
     private fun getPersonsFromFile(file: File) {
-        val personsString: String = file.readLines().joinToString(separator = "")
-        val gson = Gson()
+        val personsJson: String = file.readLines().joinToString(separator = "")
         try {
-            val persons: List<Person> = gson.fromJson(personsString, Array<Person>::class.java).toList()
+            val persons: List<Person> = gson.fromJson(personsJson, Array<Person>::class.java).toList()
             for (person in persons) {
                 if (isPersonPresent(person.name, person.lastName)) {
                     logger.info("ignoring Person{ ${person.name}, ${person.lastName} }")
@@ -57,5 +57,4 @@ class PersonServiceImpl(private val personRepository: PersonRepository) : Person
     override fun savePerson(person: Person): Person {
         return personRepository.save(person)
     }
-
 }
